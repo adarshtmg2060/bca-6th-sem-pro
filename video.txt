@@ -1,1 +1,1 @@
-editor stroke width tool
+editor font style tools [12:22]

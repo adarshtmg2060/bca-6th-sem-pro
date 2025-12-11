@@ -1,4 +1,4 @@
-import { ChromePicker, CirclePicker } from "react-color";
+import dynamic from "next/dynamic";
 import { colors } from "@/features/editor/types";
 import { rgbaObjectToString } from "@/features/editor/utils";
 
@@ -6,6 +6,17 @@ interface ColorPickerProps {
   value: string;
   onChange: (value: string) => void;
 }
+
+// Dynamically import the pickers, client-side only
+const ChromePicker = dynamic(
+  () => import("react-color").then((mod) => mod.ChromePicker),
+  { ssr: false }
+);
+
+const CirclePicker = dynamic(
+  () => import("react-color").then((mod) => mod.CirclePicker),
+  { ssr: false }
+);
 
 export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
   return (

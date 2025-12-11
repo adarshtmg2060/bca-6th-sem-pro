@@ -1,6 +1,26 @@
 import { fabric } from "fabric";
+import { ITextboxOptions } from "fabric/fabric-impl";
 import { Leaf } from "lucide-react";
 import * as material from "material-colors";
+
+export const fonts = [
+  '"Arial", sans-serif',
+  '"Arial Black", sans-serif',
+  '"Verdana", sans-serif',
+  '"Helvetica", sans-serif',
+  '"Tahoma", sans-serif',
+  '"Trebuchet MS", sans-serif',
+  '"Times New Roman", serif',
+  '"Georgia", serif',
+  '"Garamond", serif',
+  '"Courier New", monospace',
+  '"Brush Script MT", cursive',
+  '"Palatino", serif',
+  '"Bookman", serif',
+  '"Comic Sans MS", cursive',
+  '"Geneva", sans-serif',
+  '"Lucida Console", monospace',
+];
 
 export const selectionDependentTools = [
   "fill",
@@ -55,6 +75,9 @@ export const FILL_COLOR = "rgb(0,0,0,1)";
 export const STROKE_COLOR = "rbg(0,0,0,1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
+export const FONT_FAMILY = "Arial";
+export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 400;
 
 export const CIRCLE_OPTIONS = {
   radius: 225,
@@ -86,6 +109,14 @@ export const TRIANGLE_OPTIONS = {
   height: 400,
   angle: 0,
 };
+export const TEXT_OPTIONS = {
+  type: "textbox",
+  left: 100,
+  right: 100,
+  fill: FILL_COLOR,
+  fontSize: FONT_SIZE,
+  fontFamily: FONT_FAMILY,
+};
 
 export const DIAMOND_OPTIONS = {
   left: 100,
@@ -109,13 +140,22 @@ export type BuildEditorProps = {
   strokeWidth: number;
   selectedObjects: fabric.Object[];
   strokeDashArray: number[];
+  fontFamily: string;
   setStrokeDashArray: (value: number[]) => void;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
+  setFontFamily: (value: string) => void;
 };
 
 export interface Editor {
+  changeFontWeight: (value: number) => void;
+  getActiveFontWeight: () => number;
+  getActiveFontFamily: () => string;
+  changeFontFamily: (value: string) => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
+  getActiveOpacity: () => number;
+  changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
   changeStrokeColor: (value: string) => void;
