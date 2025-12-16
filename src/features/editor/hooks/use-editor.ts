@@ -16,9 +16,11 @@ import {
   TEXT_OPTIONS,
   FONT_FAMILY,
   FONT_WEIGHT,
+  FONT_SIZE,
 } from "@/features/editor/types";
 import { useCanvasEvents } from "@/features/editor/hooks/use-canvas-events";
 import { isTextType } from "@/features/editor/utils";
+import { ITextboxOptions, ITextOptions } from "fabric/fabric-impl";
 
 const buildEditor = ({
   canvas,
@@ -52,6 +54,25 @@ const buildEditor = ({
     canvas.setActiveObject(object);
   };
   return {
+    addImage: (value: string) => {
+      fabric.Image.fromURL(
+        value,
+        (image) => {
+          const workspace = getWorkspace();
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        }
+      );
+    },
+    delete: () => {
+      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
     addText: (value, options) => {
       const object = new fabric.Textbox(value, {
         ...TEXT_OPTIONS,
@@ -66,6 +87,102 @@ const buildEditor = ({
         return 1; // default opacity
       }
       const value = selectedObject.get("opacity") ?? 1;
+      return value;
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // faulty Ts Libery
+          object.set({ fontSize: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontSize: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return FONT_SIZE;
+      }
+      //@ts-ignore
+      const value = selectedObject.get("fontSize") || FONT_SIZE;
+      return value;
+    },
+    changeTextAlign: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // faulty Ts Libery
+          object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return "left";
+      }
+      //@ts-ignore
+      const value = selectedObject.get("textAlign") || "left";
+      return value;
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // faulty Ts Libery
+          object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontUnderline: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return false;
+      }
+      //@ts-ignore
+      const value = selectedObject.get("underline") || false;
+      return value;
+    },
+    changeFontLinethrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // faulty Ts Libery
+          object.set({ linethrough: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontLinethrough: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return false;
+      }
+      //@ts-ignore
+      const value = selectedObject.get("linethrough") || false;
+      return value;
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // faulty Ts Libery
+          object.set({ fontStyle: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontStyle: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return "normal";
+      }
+      //@ts-ignore
+      //faulty ts library
+      const value = selectedObject.get("fontStyle") || "normal";
       return value;
     },
     changeFontWeight: (value: number) => {

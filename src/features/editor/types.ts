@@ -149,6 +149,18 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  addImage: (value: string) => void;
+  delete: () => void;
+  changeFontSize: (value: number) => void;
+  getActiveFontSize: () => number;
+  changeTextAlign: (value: string) => void;
+  getActiveTextAlign: () => string;
+  changeFontUnderline: (value: boolean) => void;
+  getActiveFontUnderline: () => boolean;
+  changeFontLinethrough: (value: boolean) => void;
+  getActiveFontLinethrough: () => boolean;
+  changeFontStyle: (value: string) => void;
+  getActiveFontStyle: () => string;
   changeFontWeight: (value: number) => void;
   getActiveFontWeight: () => number;
   getActiveFontFamily: () => string;
