@@ -7,7 +7,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { CiFileOn } from "react-icons/ci";
-
+import { useFilePicker } from "use-file-picker";
 import { Logo } from "@/features/editor/components/logo";
 import { Hint } from "@/components/hint";
 import { cn } from "@/lib/utils";
@@ -20,14 +20,32 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BsCloudCheck } from "react-icons/bs";
-import { ActiveTool } from "../types";
+import { ActiveTool, Editor } from "@/features/editor/types";
 
 interface NavbarProps {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
+export const Navbar = ({
+  activeTool,
+  onChangeActiveTool,
+  editor,
+}: NavbarProps) => {
+  const { openFilePicker } = useFilePicker({
+    accept: ".json",
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = () => {
+          editor?.loadJson(reader.result as string);
+        };
+      }
+    },
+  });
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -41,7 +59,9 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="min-w-60">
             <DropdownMenuItem
-              onClick={() => {}} //add functionality
+              onClick={() => {
+                openFilePicker();
+              }}
               className="flex items-center gap-x-2"
             >
               <CiFileOn className="size-8" />
@@ -66,12 +86,26 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
           </Button>
         </Hint>
         <Hint label="Undo" side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canUndo()}
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              editor?.onUndo();
+            }}
+          >
             <Undo2 className="size-4" />
           </Button>
         </Hint>
         <Hint label="Redo" side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canRedo()}
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              editor?.onRedo();
+            }}
+          >
             <Redo2 className="size-4" />
           </Button>
         </Hint>
@@ -91,7 +125,9 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveJson();
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -103,7 +139,9 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.savePng();
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -115,7 +153,9 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveJpg();
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -127,7 +167,9 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveSvg();
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>

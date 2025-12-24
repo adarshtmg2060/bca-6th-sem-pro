@@ -1,4 +1,5 @@
-editor font style tools [12:22] done
+    history undo/redo 10:20
 
+    3c9e5a6d7b2f1a4 //api key cloudfare worker
 
-3c9e5a6d7b2f1a4 //api key cloudfare worker
+    # DATABASE_URL="postgresql://postgres:root@localhost:5432/designly"

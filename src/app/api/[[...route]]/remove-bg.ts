@@ -1,6 +1,7 @@
 import { Hono } from "hono";
+import { verifyAuth } from "@hono/auth-js";
 
-const app = new Hono().post("/", async (c) => {
+const app = new Hono().post("/", verifyAuth(), async (c) => {
   const body = await c.req.json();
   const { imageUrl } = body;
 
