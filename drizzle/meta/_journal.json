@@ -15,6 +15,13 @@
       "when": 1766558217581,
       "tag": "0001_wealthy_banshee",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767356166220,
+      "tag": "0002_far_zemo",
+      "breakpoints": true
     }
   ]
 }

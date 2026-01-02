@@ -4,6 +4,8 @@ import { handle } from "hono/vercel";
 import images from "./images";
 import removebg from "./remove-bg";
 import users from "./users";
+import projects from "./projects";
+
 import { AuthConfig, initAuthConfig } from "@hono/auth-js";
 import authConfig from "@/auth.config";
 
@@ -25,6 +27,7 @@ app.use("*", initAuthConfig(getAuthConfig));
 app.route("/images", images);
 app.route("/remove-bg", removebg);
 app.route("/users", users);
+app.route("/projects", projects);
 
 // ✅ Export the app type AFTER routes are attached
 export type AppType = typeof app;
